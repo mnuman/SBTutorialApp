@@ -94,6 +94,8 @@
       <list n="technologyScope">
          <string v="Maven"/>
          <string v="ServiceBusTechnology"/>
+         <string v="WSDL"/>
+         <string v="WSPolicy"/>
          <string v="XML"/>
       </list>
    </hash>
@@ -191,4 +193,5 @@
          </list>
       </hash>
    </hash>
+   <value n="SOA_DVM_FOLDER_NAME" v="DVM/"/>
 </jpr:project>
