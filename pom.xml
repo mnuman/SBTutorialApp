@@ -12,6 +12,7 @@
     <modules>
         <module>System</module>
         <module>XYZCommon</module>
+        <module>XYZCustomer</module>
     </modules>
 
 </project>

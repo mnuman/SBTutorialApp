@@ -23,7 +23,7 @@
         <tran:provider-id>http</tran:provider-id>
         <tran:inbound>false</tran:inbound>
         <tran:URI>
-            <env:value>http://localhost:8088/XYZCommon/CustomerService</env:value>
+            <env:value>http://localhost:8088/CustomerService</env:value>
         </tran:URI>
         <tran:outbound-properties>
             <tran:load-balancing-algorithm>round-robin</tran:load-balancing-algorithm>
