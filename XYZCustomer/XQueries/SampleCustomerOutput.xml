@@ -1,0 +1,6 @@
+<addr:addrval_input xmlns:addr="urn:xyzbank:cust:schema:address">
+  <address_line>Address17,Address28,Address39</address_line>
+  <state>State10</state>
+  <country>Country11</country>
+  <zip_code>ZipCode12</zip_code>
+</addr:addrval_input>

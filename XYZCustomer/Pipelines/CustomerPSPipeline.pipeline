@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:coreEntry>
+        <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
+            <con:wsdl ref="XYZCustomer/WSDLs/CustomerPS"/>
+            <con:binding>
+                <con:name>CustomerServiceBinding</con:name>
+                <con:namespace>http://xmlns.xyzbank.com/wsdl/Customer</con:namespace>
+            </con:binding>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:template-overrides>
+            <con:template-branch-override id="_FlowId-7f000101.1361d2f9.0.14c02a07712.N8000">
+                <con:branch-node>
+                    <con:branch-table>
+                        <con:branch name="CreateCustomer">
+                            <con:operator>equals</con:operator>
+                            <con:value/>
+                            <con:template-overrides>
+                                <con:action-override id="_ActionId-7f000101.1361d2f9.0.14c02a07712.N7ff9">
+                                    <con1:validate xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config">
+                                        <con1:wsdl ref="XYZCustomer/WSDLs/CustomerPS"/>
+                                        <con1:schemaElement xmlns:cus="http://xmlns.xyzbank.com/schema/Customer">cus:Customer</con1:schemaElement>
+                                        <con1:location>
+                                            <con2:xpathText xmlns:con2="http://www.bea.com/wli/sb/stages/config">./cus:Customer</con2:xpathText>
+                                        </con1:location>
+                                    </con1:validate>
+                                </con:action-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff8">
+                                    <con:actions>
+                                        <con1:ifThenElse xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config">
+                                            <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7f52</con2:id>
+                                            <con1:case id="_BranchId-7f000101.1361d2f9.0.14c02a07712.N7f51">
+                                                <con1:condition>
+                                                    <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">not(matches($body/cus:Customer/Email/text(),'[a-zA-Z0-9]+@[a-zA-Z]{2,3}','i'))</con2:xqueryText>
+                                                </con1:condition>
+                                                <con1:actions>
+                                                    <con1:Error>
+                                                        <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7f1f</con2:id>
+                                                        <con1:errCode>XYZ-0001</con1:errCode>
+                                                        <con1:message>Email is not valid</con1:message>
+                                                    </con1:Error>
+                                                </con1:actions>
+                                            </con1:case>
+                                        </con1:ifThenElse>
+                                    </con:actions>
+                                </con:placeholder-override>
+                                <con:stage-override id="_StageId-7f000101.1361d2f9.0.14c02a07712.N7ffd">
+                                    <con:context>
+                                        <con1:userNsDecl prefix="cus" namespace="http://xmlns.xyzbank.com/schema/Customer" xmlns:con1="http://www.bea.com/wli/sb/stages/config"/>
+                                    </con:context>
+                                </con:stage-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff7"/>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7fc2">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7f1e">
+                                    <con:stage id="_StageId-7f000101.1361d2f9.0.14c02a07712.N7f14" name="AddrValidation">
+                                        <con:context>
+                                            <con1:userNsDecl prefix="cus" namespace="http://xmlns.xyzbank.com/schema/Customer" xmlns:con1="http://www.bea.com/wli/sb/stages/config"/>
+                                            <con1:userNsDecl prefix="addr" namespace="urn:xyzbank:cust:schema:address" xmlns:con1="http://www.bea.com/wli/sb/stages/config"/>
+                                        </con:context>
+                                        <con:actions>
+                                            <con1:ifThenElse xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config">
+                                                <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7ea5</con2:id>
+                                                <con1:case id="_BranchId-7f000101.1361d2f9.0.14c02a07712.N7ea4">
+                                                    <con1:condition>
+                                                        <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">$ConfigVar = 'Y'</con2:xqueryText>
+                                                    </con1:condition>
+                                                    <con1:actions>
+                                                        <con1:wsCallout>
+                                                            <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7e71</con2:id>
+                                                            <con1:service ref="XYZCommon/BusinessServices/AddrValidationServiceBS" xsi:type="ref:BusinessServiceRef" xmlns:ref="http://www.bea.com/wli/sb/reference"/>
+                                                            <con1:operation>validate_address</con1:operation>
+                                                            <con1:request>
+                                                                <con1:body wrapped="true">addrReqBody</con1:body>
+                                                            </con1:request>
+                                                            <con1:response>
+                                                                <con1:body wrapped="true">addrRespBody</con1:body>
+                                                            </con1:response>
+                                                            <con1:requestTransform>
+                                                                <con1:assign varName="addrReqBody">
+                                                                    <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7e3b</con2:id>
+                                                                    <con1:expr>
+                                                                        <con2:xqueryTransform xmlns:con2="http://www.bea.com/wli/sb/stages/config">
+                                                                            <con2:resource ref="XYZCustomer/XQueries/AddrToAddrBSInput"/>
+                                                                            <con2:param name="inputAddr">
+                                                                                <con2:path>$body/cus:Customer</con2:path>
+                                                                            </con2:param>
+                                                                        </con2:xqueryTransform>
+                                                                    </con1:expr>
+                                                                </con1:assign>
+                                                                <con1:assign varName="addrReqBody">
+                                                                    <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7e09</con2:id>
+                                                                    <con1:expr>
+                                                                        <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">&lt;soap-env:Body>{$addrReqBody}&lt;/soap-env:Body></con2:xqueryText>
+                                                                    </con1:expr>
+                                                                </con1:assign>
+                                                            </con1:requestTransform>
+                                                            <con1:responseTransform/>
+                                                        </con1:wsCallout>
+                                                        <con1:ifThenElse>
+                                                            <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7dd4</con2:id>
+                                                            <con1:case id="_BranchId-7f000101.1361d2f9.0.14c02a07712.N7dd3">
+                                                                <con1:condition>
+                                                                    <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">$addrRespBody/addr:addrval_output/status/text() != 'S'</con2:xqueryText>
+                                                                </con1:condition>
+                                                                <con1:actions>
+                                                                    <con1:Error>
+                                                                        <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7d71</con2:id>
+                                                                        <con1:errCode>XYZ-0002</con1:errCode>
+                                                                        <con1:message>Address is invalid.</con1:message>
+                                                                    </con1:Error>
+                                                                </con1:actions>
+                                                            </con1:case>
+                                                        </con1:ifThenElse>
+                                                    </con1:actions>
+                                                </con1:case>
+                                            </con1:ifThenElse>
+                                        </con:actions>
+                                    </con:stage>
+                                    <con:stage id="_StageId-7f000101.1361d2f9.0.14c02a07712.N7d3d" name="Defaulting">
+                                        <con:context>
+                                            <con1:userNsDecl prefix="cus" namespace="http://xmlns.xyzbank.com/schema/Customer" xmlns:con1="http://www.bea.com/wli/sb/stages/config"/>
+                                        </con:context>
+                                        <con:actions>
+                                            <con1:ifThenElse xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config">
+                                                <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7d09</con2:id>
+                                                <con1:case id="_BranchId-7f000101.1361d2f9.0.14c02a07712.N7d08">
+                                                    <con1:condition>
+                                                        <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">fn:empty($body/cus:Customer/CustomerType)</con2:xqueryText>
+                                                    </con1:condition>
+                                                    <con1:actions>
+                                                        <con1:insert varName="body">
+                                                            <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-7f000101.1361d2f9.0.14c02a07712.N7ca6</con2:id>
+                                                            <con1:location>
+                                                                <con2:xpathText xmlns:con2="http://www.bea.com/wli/sb/stages/config">./cus:Customer/DOB</con2:xpathText>
+                                                            </con1:location>
+                                                            <con1:where>after</con1:where>
+                                                            <con1:expr>
+                                                                <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">&lt;CustomerType>Individual&lt;/CustomerType></con2:xqueryText>
+                                                            </con1:expr>
+                                                        </con1:insert>
+                                                    </con1:actions>
+                                                </con1:case>
+                                            </con1:ifThenElse>
+                                        </con:actions>
+                                    </con:stage>
+                                </con:placeholder-override>
+                            </con:template-overrides>
+                        </con:branch>
+                        <con:branch name="UpdateCustomer">
+                            <con:operator>equals</con:operator>
+                            <con:value/>
+                            <con:template-overrides>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff8">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff7"/>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7fc2">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7f1e"/>
+                            </con:template-overrides>
+                        </con:branch>
+                        <con:branch name="DeleteCustomer">
+                            <con:operator>equals</con:operator>
+                            <con:value/>
+                            <con:template-overrides>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff8">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff7"/>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7fc2">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7f1e"/>
+                            </con:template-overrides>
+                        </con:branch>
+                        <con:branch name="MergeCustomer">
+                            <con:operator>equals</con:operator>
+                            <con:value/>
+                            <con:template-overrides>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff8">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff7"/>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7fc2">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7f1e"/>
+                            </con:template-overrides>
+                        </con:branch>
+                        <con:branch name="MigrateCustomer">
+                            <con:operator>equals</con:operator>
+                            <con:value/>
+                            <con:template-overrides>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff8">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7ff7"/>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7fc2">
+                                    <con:actions/>
+                                </con:placeholder-override>
+                                <con:placeholder-override id="PlaceholderID_7f000101.1361d2f9.0.14c02a07712.N7f1e"/>
+                            </con:template-overrides>
+                        </con:branch>
+                        <con:default-branch/>
+                    </con:branch-table>
+                </con:branch-node>
+            </con:template-branch-override>
+        </con:template-overrides>
+    </con:router>
+    <con:template ref="XYZCustomer/Pipelines/CustomerPipelineTemplate"/>
+</con:pipelineEntry>
