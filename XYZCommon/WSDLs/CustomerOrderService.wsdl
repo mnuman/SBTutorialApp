@@ -1,0 +1,79 @@
+<wsdl:definitions name="CustomerOrderService" targetNamespace="urn:xyzbank:cust:wsdl:order"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n2="urn:xyzbank:cust:schema:order"
+                  xmlns:n3="urn:xyzbank:cust:wsdl:order"
+                  xmlns:n4="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:xyzbank:cust:schema:order"
+                xmlns:tns="urn:xyzbank:cust:schema:order" elementFormDefault="qualified">
+      <xsd:complexType name="customer_order_input">
+        <xsd:sequence>
+          <xsd:element name="customer_id" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="customer_order_output">
+        <xsd:sequence>
+          <xsd:element name="orders" type="tns:trade_order" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="trade_order">
+        <xsd:sequence>
+          <xsd:element name="account_id" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="instrument_code" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="order_action" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="order_giver" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="order_taker" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="exchange" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="price" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="price_currency_code" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="price_method" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="quantity" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="date_created" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="brokerage_amount" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="brokerage_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="brokerage_percent" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="contract_note_comment" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="error_msg">
+        <xsd:sequence>
+          <xsd:element name="error_code" type="xsd:string"/>
+          <xsd:element name="error_message" minOccurs="0" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="order_input" type="tns:customer_order_input"/>
+      <xsd:element name="order_output" type="tns:customer_order_output"/>
+      <xsd:element name="error_msg" type="tns:error_msg"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="get_customer_orders_req">
+    <wsdl:part name="parameters" element="n2:order_input"/>
+  </wsdl:message>
+  <wsdl:message name="get_customer_orders_resp">
+    <wsdl:part name="parameters" element="n2:order_output"/>
+  </wsdl:message>
+  <wsdl:message name="get_customer_orders_fault">
+    <wsdl:part name="parameters" element="n2:error_msg"/>
+  </wsdl:message>
+  <wsdl:portType name="customer_order_port">
+    <wsdl:operation name="get_customer_orders">
+      <wsdl:input message="n3:get_customer_orders_req"/>
+      <wsdl:output message="n3:get_customer_orders_resp"/>
+      <wsdl:fault name="fault_msg" message="n3:get_customer_orders_fault"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="customer_order_binding" type="n3:customer_order_port">
+    <n4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="get_customer_orders">
+      <n4:operation soapAction="get_customer_orders" style="document"/>
+      <wsdl:input>
+        <n4:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <n4:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="fault_msg">
+        <n4:fault name="fault_msg" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

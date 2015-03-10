@@ -1,0 +1,243 @@
+<wsdl:definitions name="CustomerEntityService" targetNamespace="urn:xyzbank:cust:wsdl:customer"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n2="urn:xyzbank:cust:schema:customer"
+                  xmlns:n3="urn:xyzbank:cust:wsdl:customer" xmlns:n4="http://schemas.xmlsoap.org/wsdl/soap/">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:xyzbank:cust:schema:customer"
+                    xmlns:tns="urn:xyzbank:cust:schema:customer">
+            <xsd:complexType name="customer_input">
+                <xsd:sequence>
+                    <xsd:element name="customer_id" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="full_name" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="customer_type" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="date_of_birth" type="xsd:date" minOccurs="0"/>
+                    <xsd:element name="email" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="phone" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="addr_line1" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="addr_line2" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="addr_line3" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="addr_line4" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="migrated_customer">
+                <xsd:sequence>
+                    <xsd:element name="customer_id" type="xsd:string"/>
+                    <xsd:element name="full_name" type="xsd:string"/>
+                    <xsd:element name="date_of_birth" type="xsd:date"/>
+                    <xsd:element name="email" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                    <xsd:element name="addr_line1" type="xsd:string"/>
+                    <xsd:element name="addr_line2" type="xsd:string"/>
+                    <xsd:element name="addr_line3" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="addr_line4" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="customer_accounts" type="tns:accounts" minOccurs="0"/>
+                    <xsd:element name="customer_orders" type="tns:orders" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="customer_account">
+                <xsd:sequence>
+                    <xsd:element name="account_id" type="xsd:long"/>
+                    <xsd:element name="account_type" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="account_name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="investor_type" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="start_date" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="brokerage_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="rebate_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="trading_limit" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="credit_limit" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="account_status" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="registration_details" type="tns:account_registration_details" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="account_registration_details">
+                <xsd:sequence>
+                    <xsd:element name="market_id" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="instrument_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="registration_details1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="postal_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="country_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="accounts">
+                <xsd:sequence>
+                    <xsd:element name="account" type="tns:customer_account" minOccurs="1" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="customer_order">
+                <xsd:sequence>
+                    <xsd:element name="account_id" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="instrument_code" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="order_action" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="price" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="currency_code" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="quantity" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="date_created" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="brokerage_amount" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="brokerage_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="brokerage_perc" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="orders">
+                <xsd:sequence>
+                    <xsd:element name="order" type="tns:customer_order" minOccurs="1" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="customerid_input">
+                <xsd:sequence>
+                    <xsd:element name="customer_id" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="customerid_output">
+                <xsd:sequence>
+                    <xsd:element name="CustomerExists" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="response_msg">
+                <xsd:sequence>
+                    <xsd:element name="customer_id" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="status" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="error_message" minOccurs="0" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="error_msg">
+                <xsd:sequence>
+                    <xsd:element name="error_code" type="xsd:string"/>
+                    <xsd:element name="error_message" minOccurs="0" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="customer" type="tns:customer_input"/>
+            <xsd:element name="migrated_customer" type="tns:migrated_customer"/>
+            <xsd:element name="status_msg" type="tns:response_msg"/>
+            <xsd:element name="fault_msg" type="tns:error_msg"/>
+            <xsd:element name="customerid_input" type="tns:customerid_input"/>
+            <xsd:element name="customerid_output" type="tns:customerid_output"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="create_customer_req">
+        <wsdl:part name="payload" element="n2:customer"/>
+    </wsdl:message>
+    <wsdl:message name="create_customer_resp">
+        <wsdl:part name="payload" element="n2:status_msg"/>
+    </wsdl:message>
+    <wsdl:message name="update_customer_req">
+        <wsdl:part name="payload" element="n2:customer"/>
+    </wsdl:message>
+    <wsdl:message name="update_customer_resp">
+        <wsdl:part name="payload" element="n2:status_msg"/>
+    </wsdl:message>
+    <wsdl:message name="delete_customer_req">
+        <wsdl:part name="payload" element="n2:customerid_input"/>
+    </wsdl:message>
+    <wsdl:message name="delete_customer_resp">
+        <wsdl:part name="payload" element="n2:status_msg"/>
+    </wsdl:message>
+    <wsdl:message name="migrate_customer_req">
+        <wsdl:part name="payload" element="n2:migrated_customer"/>
+    </wsdl:message>
+    <wsdl:message name="migrate_customer_resp">
+        <wsdl:part name="payload" element="n2:status_msg"/>
+    </wsdl:message>
+    <wsdl:message name="find_customer_req">
+        <wsdl:part name="payload" element="n2:customerid_input"/>
+    </wsdl:message>
+    <wsdl:message name="find_customer_resp">
+        <wsdl:part name="payload" element="n2:customerid_output"/>
+    </wsdl:message>
+    <wsdl:message name="get_customer_req">
+        <wsdl:part name="payload" element="n2:customerid_input"/>
+    </wsdl:message>
+    <wsdl:message name="get_customer_resp">
+        <wsdl:part name="payload" element="n2:customer"/>
+    </wsdl:message>
+    <wsdl:message name="get_customer_fault">
+        <wsdl:part name="payload" element="n2:fault_msg"/>
+    </wsdl:message>
+    <wsdl:portType name="customer_service_port">
+        <wsdl:operation name="create_customer">
+            <wsdl:input message="n3:create_customer_req"/>
+            <wsdl:output message="n3:create_customer_resp"/>
+        </wsdl:operation>
+        <wsdl:operation name="update_customer">
+            <wsdl:input message="n3:update_customer_req"/>
+            <wsdl:output message="n3:update_customer_resp"/>
+        </wsdl:operation>
+        <wsdl:operation name="delete_customer">
+            <wsdl:input message="n3:delete_customer_req"/>
+            <wsdl:output message="n3:delete_customer_resp"/>
+        </wsdl:operation>
+        <wsdl:operation name="migrate_customer">
+            <wsdl:input message="n3:migrate_customer_req"/>
+            <wsdl:output message="n3:migrate_customer_resp"/>
+        </wsdl:operation>
+        <wsdl:operation name="find_customer">
+            <wsdl:input message="n3:find_customer_req"/>
+            <wsdl:output message="n3:find_customer_resp"/>
+        </wsdl:operation>
+        <wsdl:operation name="get_customer">
+            <wsdl:input message="n3:get_customer_req"/>
+            <wsdl:output message="n3:get_customer_resp"/>
+            <wsdl:fault name="fault_msg" message="n3:get_customer_fault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="customer_service_binding" type="n3:customer_service_port">
+        <n4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="create_customer">
+            <n4:operation soapAction="create_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="update_customer">
+            <n4:operation soapAction="update_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="delete_customer">
+            <n4:operation soapAction="delete_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="migrate_customer">
+            <n4:operation soapAction="migrate_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="find_customer">
+            <n4:operation soapAction="find_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="get_customer">
+            <n4:operation soapAction="get_customer" style="document"/>
+            <wsdl:input>
+                <n4:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <n4:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="fault_msg">
+                <n4:fault name="fault_msg" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+</wsdl:definitions>

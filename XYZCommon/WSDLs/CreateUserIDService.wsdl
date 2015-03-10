@@ -1,0 +1,60 @@
+<wsdl:definitions name="CreateUserIDService"
+	targetNamespace="urn:xyzbank:cust:wsdl:userid"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n2="urn:xyzbank:cust:schema:userid"
+	xmlns:n3="urn:xyzbank:cust:wsdl:userid"
+	xmlns:n4="http://schemas.xmlsoap.org/wsdl/soap/">
+
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:xyzbank:cust:schema:userid"
+			xmlns:tns="urn:xyzbank:cust:schema:userid">
+
+			<xsd:complexType name="input_msg">
+				<xsd:sequence>
+					<xsd:element name="system" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="output_msg">
+				<xsd:sequence>
+					<xsd:element name="unique_user_id" type="xsd:string" />
+					<xsd:element name="status" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="error_msg" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="user_input" type="tns:input_msg" />
+			<xsd:element name="user_output" type="tns:output_msg" />
+
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="userid_request">
+		<wsdl:part name="payload" element="n2:user_input" />
+	</wsdl:message>
+	<wsdl:message name="userid_response">
+		<wsdl:part name="payload" element="n2:user_output" />
+	</wsdl:message>
+
+	<wsdl:portType name="userid_port">
+		<wsdl:operation name="create_uniqueid">
+			<wsdl:input message="n3:userid_request" />
+			<wsdl:output message="n3:userid_response" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="userid_binding" type="n3:userid_port">
+		<n4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="create_uniqueid">
+			<n4:operation soapAction="CreateUniqueId" style="document" />
+			<wsdl:input>
+				<n4:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<n4:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+</wsdl:definitions>
+

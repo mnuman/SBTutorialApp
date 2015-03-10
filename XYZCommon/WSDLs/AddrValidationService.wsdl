@@ -1,0 +1,62 @@
+<wsdl:definitions name="AddressValidationService"
+	targetNamespace="urn:xyzbank:cust:wsdl:address:validation"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n2="urn:xyzbank:cust:schema:address"
+	xmlns:n3="urn:xyzbank:cust:wsdl:address:validation"
+	xmlns:n4="http://schemas.xmlsoap.org/wsdl/soap/">
+
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:xyzbank:cust:schema:address"
+			xmlns:tns="urn:xyzbank:cust:schema:address">
+
+			<xsd:complexType name="input_msg">
+				<xsd:sequence>
+					<xsd:element name="address_line" type="xsd:string" />
+					<xsd:element name="state" type="xsd:string" />
+					<xsd:element name="country" type="xsd:string" />
+					<xsd:element name="zip_code" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="output_msg">
+				<xsd:sequence>					
+					<xsd:element name="status" type="xsd:string"/>
+					<xsd:element name="error_msg" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="addrval_input" type="tns:input_msg" />
+			<xsd:element name="addrval_output" type="tns:output_msg" />
+
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="addrval_request">
+		<wsdl:part name="payload" element="n2:addrval_input" />
+	</wsdl:message>
+	<wsdl:message name="addrval_response">
+		<wsdl:part name="payload" element="n2:addrval_output" />
+	</wsdl:message>
+
+	<wsdl:portType name="addrval_port">
+		<wsdl:operation name="validate_address">
+			<wsdl:input message="n3:addrval_request" />
+			<wsdl:output message="n3:addrval_response" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="addrval_binding" type="n3:addrval_port">
+		<n4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="validate_address">
+			<n4:operation soapAction="ValidateAddress" style="document" />
+			<wsdl:input>
+				<n4:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<n4:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+</wsdl:definitions>
+

@@ -1,0 +1,87 @@
+<wsdl:definitions name="CustomerAccountService" targetNamespace="urn:xyzbank:cust:wsdl:account"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:n2="urn:xyzbank:cust:schema:account"
+                  xmlns:n3="urn:xyzbank:cust:wsdl:account"
+                  xmlns:n4="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="urn:xyzbank:cust:schema:account"
+		xmlns:tns="urn:xyzbank:cust:schema:account" elementFormDefault="qualified">
+      <xsd:complexType name="customer_account_input">
+        <xsd:sequence>
+          <xsd:element name="customer_id" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="customer_account_output">
+        <xsd:sequence>
+          <xsd:element name="account_id" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="account_type" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="account_name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="investor_type" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="start_date" type="xsd:date" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="brokerage_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="rebate_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="tax_number1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="trading_limit" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="credit_limit" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="account_status" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="registration_details" type="tns:account_registration_details" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="account_registration_details">
+        <xsd:sequence>
+          <xsd:element name="market_id" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="instrument_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="registration_details1" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="registration_details2" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="registration_details3" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="registration_details4" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="postal_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="country_code" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="error_msg">
+        <xsd:sequence>
+          <xsd:element name="error_code" type="xsd:string"/>
+          <xsd:element name="error_message" minOccurs="0" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="account_input" type="tns:customer_account_input"/>
+      <xsd:element name="account_output" type="tns:customer_account_output"/>
+      <xsd:element name="error_msg" type="tns:error_msg"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="get_customer_accounts_req">
+    <wsdl:part name="parameters" element="n2:account_input"/>
+  </wsdl:message>
+  <wsdl:message name="get_customer_accounts_resp">
+    <wsdl:part name="parameters" element="n2:account_output"/>
+  </wsdl:message>
+  <wsdl:message name="get_customer_accounts_fault">
+    <wsdl:part name="parameters" element="n2:error_msg"/>
+  </wsdl:message>
+  <wsdl:portType name="customer_account_port">
+    <wsdl:operation name="get_customer_accounts">
+      <wsdl:input message="n3:get_customer_accounts_req"/>
+      <wsdl:output message="n3:get_customer_accounts_resp"/>
+      <wsdl:fault name="fault_msg" message="n3:get_customer_accounts_fault"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="customer_account_binding" type="n3:customer_account_port">
+    <n4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="get_customer_accounts">
+      <n4:operation soapAction="get_customer_accounts" style="document"/>
+      <wsdl:input>
+        <n4:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <n4:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="fault_msg">
+        <n4:fault name="fault_msg" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>
